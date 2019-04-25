@@ -34,7 +34,7 @@ def find_point(x1,y1,x2,y2,x3,y3,x4,y4):#точка пересечения от�
     coord[1]=((y3-y4)*coord[0]-(x3*y4-x4*y3))/(x4-x3)
     coord[2]=math.sqrt((x1-coord[0])**2+(y1-coord[1])**2)
     return coord
-def find_mir(Cx,Cy,Ax,Ay,A1x,A1y,A2x,A2y):
+def find_mir(Cx,Cy,Ax,Ay,A1x,A1y,A2x,A2y): #находим точку, симметричную нормали зеркала
     #for point C(laser: C, A-C) and wall (A1,A2),D=A2-A1, A between A1-A2; B normal, new point C+2fD, f=(Ay-Cy+(Cx-Ax)By/Bx)/(Dy-ByDx/Bx)
     #new way (A, C+2fD-A)
     coord=[0]*2
@@ -51,9 +51,10 @@ def find_mir(Cx,Cy,Ax,Ay,A1x,A1y,A2x,A2y):
     coord[1]=Cy+2*f*Dy
     return coord
 
-def Laser_step(r,l1):
+def Laser_step(r,l1):#получаем координаты стен и лазера, возвращаем новые координаты лазера
   l2=Laser
   mas1=[0]*3
+  mas2=[0]*2
   l2.Direction[0]=l1.Position[0]+(l1.Direction[0]-l1.Position[0])*200/(math.sqrt((l1.Direction[0]-l1.Position[0])**2+(l1.Direction[1]-l1.Position[1])**2))
   l2.Direction[1]=l1.Position[1]+(l1.Direction[1]-l1.Position[1])*200/(math.sqrt((l1.Direction[0]-l1.Position[0])**2+(l1.Direction[1]-l1.Position[1])**2))  
   l1.Direction[0]=l2.Direction[0] #сдвигаем второй конец отрезка за пределы поля
@@ -80,10 +81,15 @@ def Laser_step(r,l1):
       mas1=find_point(l1.Position[0],l1.Position[1],l1.Direction[0],l1.Direction[1],r.Nodes[i][0],r.Nodes[i][1],r.Nodes[int((i+1)%r.Number_of_walls)][0],r.Nodes[int((i+1)%r.Number_of_walls)][1]))
       if(mas1[2]<rmin):
             rmin=mas1[2]
+            #print(mas1)
             l2.Position[0]=mas1[0]
             l2.Position[1]=mas1[1] #запоминаем точку пересечения
             mas2=find_mir(l1.Position[0],l1.Position[1],mas1[0],mas1[1],r.Nodes[i][0],r.Nodes[i][1],r.Nodes[int((i+1)%r.Number_of_walls)][0],r.Nodes[int((i+1)%r.Number_of_walls)][1]))
+            #print(mas2)
             l2.Direction[0]=mas2[0]#запоминаем направление
             l2.Direction[1]=mas2[1]
+  #print(l2.Position,l2.Direction)
+  #if(rmin==200):
+    #print("точка ушла за пределы зоны")
   return l2
 
