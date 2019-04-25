@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk
 
 class MirrorRoomApp(Frame):
     '''Base framed application class'''
@@ -21,16 +22,18 @@ class MirrorRoomApp(Frame):
         self.buttonFrame.grid(row=1, column=0, sticky=W)
         self.buttonBuildRoom = Button(self.buttonFrame, text='Build Room')
         self.buttonBuildRoom.grid(row=1, column=0, sticky=W)
+        self.comboBoxNumberOfWalls = ttk.Combobox(self.buttonFrame, values=["4","5","6","7","8","9"], width = 1)
+        self.comboBoxNumberOfWalls.grid(row=1, column=1)
         self.buttonBuildLaser = Button(self.buttonFrame, text='Place Laser')
-        self.buttonBuildLaser.grid(row=1, column=1, sticky=W)
+        self.buttonBuildLaser.grid(row=1, column=2, sticky=W)
         self.buttonNextReflection = Button(self.buttonFrame, text='Next Reflection')
-        self.buttonNextReflection.grid(row=1, column=2, sticky=W)
+        self.buttonNextReflection.grid(row=1, column=3, sticky=W)
         self.buttonQuit = Button(self.buttonFrame, text='Quit', command=self.quit)
-        self.buttonQuit.grid(row=1, column=3, sticky=W)
+        self.buttonQuit.grid(row=1, column=4, sticky=W)
         self.XCoordLabel = Label(self.buttonFrame, text = 'X')
-        self.XCoordLabel.grid(row=1, column=4)
+        self.XCoordLabel.grid(row=1, column=5)
         self.YCoordLabel = Label(self.buttonFrame, text = 'Y')
-        self.YCoordLabel.grid(row=1, column=5)
+        self.YCoordLabel.grid(row=1, column=6)
 
 		
     def mousemove(self, event):
