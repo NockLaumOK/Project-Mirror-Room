@@ -72,7 +72,8 @@ class MirrorRoomApp(Frame):
 
     def create(self):
         '''Create all the widgets'''
-        self.canvasRoom = Canvas(self, width=500, height=500, bg='#FFFFFF')
+        self.canvasRoom = Canvas(self, width=400, height=700, bg='#FFFFFF')
+        self.canvasRoom.pack()
         self.canvasRoom.grid(columnspan=1, sticky=W+N+E)
         self.canvasRoom.bind("<Motion>", self.mousemove)
         self.buttonFrame = Frame(self)
@@ -151,40 +152,40 @@ class MirrorRoomApp(Frame):
         
         mas1=[0]*3
         mas2=[0]*2
-        dl2x = pl1x + (dl1x - pl1x)*2000/(math.sqrt((dl1x - pl1x)**2+(dl1y-pl1y)**2))
-        dl2y = pl1y+(dl1y-pl1y)*2000/(math.sqrt((dl1x-pl1x)**2+(dl1y-pl1y)**2))
-        print (int(dl2x), int(dl2y), int(pl2x), int(pl2y))
+        dl2x = pl1x + (dl1x - pl1x)*20000/(math.sqrt((dl1x - pl1x)**2+(dl1y-pl1y)**2))
+        dl2y = pl1y+(dl1y-pl1y)*20000/(math.sqrt((dl1x-pl1x)**2+(dl1y-pl1y)**2))
+        #print (int(dl2x), int(dl2y), int(pl2x), int(pl2y))
         dl1x = dl2x 
         dl1y = dl2y
         mas1[0]=pl1x
         mas1[1]=pl1y
-        if(cross(pl1x,pl1y,dl1x,dl1y,0,0,0,990)): 
-            mas1=find_point(pl1x,pl1y,dl1x,dl1y,0,0,0,990)
-            print("1")
-        if(cross(pl1x,pl1y,dl1x,dl1y,0,0,990,0)):
-            mas1=find_point(pl1x,pl1y,dl1x,dl1y,0,0,990,0)
-            print("2")
-        if(cross(pl1x,pl1y,dl1x,dl1y,990,990,990,0)):
-            mas1=find_point(pl1x,pl1y,dl1x,dl1y,990,990,990,0)
-            print("3")
-        if(cross(pl1x,pl1y,dl1x,dl1y,990,990,0,990)):
-            mas1=find_point(pl1x,pl1y,dl1x,dl1y,990,990,0,990)
-            print("4")
+        if(cross(pl1x,pl1y,dl1x,dl1y,0,0,0,9900)): 
+            mas1=find_point(pl1x,pl1y,dl1x,dl1y,0,0,0,9900)
+            #print("1")
+        if(cross(pl1x,pl1y,dl1x,dl1y,0,0,9900,0)):
+            mas1=find_point(pl1x,pl1y,dl1x,dl1y,0,0,9900,0)
+            #print("2")
+        if(cross(pl1x,pl1y,dl1x,dl1y,9900,9900,9900,0)):
+            mas1=find_point(pl1x,pl1y,dl1x,dl1y,9900,9900,9900,0)
+            #print("3")
+        if(cross(pl1x,pl1y,dl1x,dl1y,9900,9900,0,9900)):
+            mas1=find_point(pl1x,pl1y,dl1x,dl1y,9900,9900,0,9900)
+            #print("4")
         dl1x = mas1[0]
         dl1y = mas1[1]
         pl2x = mas1[0]
         pl2y = mas1[1]
         dl2x = mas1[0]
         dl2y = mas1[1]
-        print (int(dl1x), int(dl1y), int(pl1x), int(pl1y))
-        print (int(dl2x), int(dl2y), int(pl2x), int(pl2y))
-        rmin=200
+        #print (int(dl1x), int(dl1y), int(pl1x), int(pl1y))
+        #print (int(dl2x), int(dl2y), int(pl2x), int(pl2y))
+        rmin=20000
         new_i=-1
         for i in range (r.Number_of_walls):
             if(cross(pl1x,pl1y,dl1x,dl1y,r.Coordinates[2*i],r.Coordinates[(2*i) + 1],r.Coordinates[int((2*i+2)%(2*r.Number_of_walls)) ],r.Coordinates[int((2*i + 3)%(2*r.Number_of_walls)) ])):
                 mas1=find_point(pl1x,pl1y,dl1x,dl1y,r.Coordinates[2*i],r.Coordinates[(2*i) + 1],r.Coordinates[int((2*i+2)%(2*r.Number_of_walls)) ],r.Coordinates[int((2*i + 3)%(2*r.Number_of_walls))])
                 if((mas1[2]<rmin)and(i!=old_i)):
-                    print("i=",i)
+                    #print("i=",i)
                     new_i=i
                     rmin = mas1[2]
                     pl2x = mas1[0]
