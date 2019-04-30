@@ -1,11 +1,12 @@
 import math
 
-from Tkinter import *
+from tkinter import *
 
 root = Tk()#for quit_function
 
 prev_x = None
 prev_y = None
+old_i = -1
 
 def cross(ax1,ay1,ax2,ay2,bx1,by1,bx2,by2):
     v1=(bx2-bx1)*(ay1-by1)-(by2-by1)*(ax1-bx1)
@@ -19,8 +20,12 @@ def cross(ax1,ay1,ax2,ay2,bx1,by1,bx2,by2):
 
 def find_point(x1,y1,x2,y2,x3,y3,x4,y4):
     coord=[0]*3
-    coord[0]=((x1*y2-x2*y1)*(x4-x3)-(x3*y4-x4*y3)*(x2-x1))/((y1-y2)*(x4-x3)-(y3-y4)*(x2-x1))
-    coord[1]=((y3-y4)*coord[0]-(x3*y4-x4*y3))/(x4-x3)
+    if(x4!=x3):
+        coord[0]=-((x1*y2-x2*y1)*(x4-x3)-(x3*y4-x4*y3)*(x2-x1))/((y1-y2)*(x4-x3)-(y3-y4)*(x2-x1))
+        coord[1]=((y4-y3)*coord[0]-(x3*y4-x4*y3))/(x4-x3)
+    else:
+        coord[1]=-((y1*x2-y2*x1)*(y4-y3)-(y3*x4-y4*x3)*(y2-y1))/((x1-x2)*(y4-y3)-(x3-x4)*(y2-y1))
+        coord[0]=((x4-x3)*coord[0]-(y3*x4-y4*x3))/(y4-y3)
     coord[2]=math.sqrt((x1-coord[0])**2+(y1-coord[1])**2)
     return coord
 
@@ -67,7 +72,7 @@ class MirrorRoomApp(Frame):
 
     def create(self):
         '''Create all the widgets'''
-        self.canvasRoom = Canvas(self, width=500, height=500, bg='#FFFFFF')
+        self.canvasRoom = Canvas(self, width=100, height=100, bg='#FFFFFF')
         self.canvasRoom.grid(columnspan=1, sticky=W+N+E)
         self.canvasRoom.bind("<Motion>", self.mousemove)
         self.buttonFrame = Frame(self)
@@ -131,7 +136,7 @@ class MirrorRoomApp(Frame):
         self.canvasRoom.bind("<1>", self.Laser_step(ourRoom, ourLaser))
         
     def Laser_step(self, r, l1):
-        global ourLaser
+        global ourLaser, old_i
         l2=Laser()
         dl1x = l1.Direction_x
         dl1y = l1.Direction_y
@@ -145,43 +150,53 @@ class MirrorRoomApp(Frame):
         
         mas1=[0]*3
         mas2=[0]*2
-        dl2x = pl1x + (dl1x - pl1x)*200/(math.sqrt((dl1x - pl1x)**2+(dl1y-pl1y)**2))
-        dl2y = pl1y+(dl1y-pl1y)*200/(math.sqrt((dl1x-pl1x)**2+(dl1y-pl1y)**2))  
+        dl2x = pl1x + (dl1x - pl1x)*2000/(math.sqrt((dl1x - pl1x)**2+(dl1y-pl1y)**2))
+        dl2y = pl1y+(dl1y-pl1y)*2000/(math.sqrt((dl1x-pl1x)**2+(dl1y-pl1y)**2))
+        print (int(dl2x), int(dl2y), int(pl2x), int(pl2y))
         dl1x = dl2x 
         dl1y = dl2y
         mas1[0]=pl1x
         mas1[1]=pl1y
-        if(cross(pl1x,pl1y,dl1x,dl1y,0,0,0,99)): 
-            mas1=find_point(pl1x,pl1y,dl1x,dl1y,0,0,0,99)
-        if(cross(pl1x,pl1y,dl1x,dl1y,0,0,99,0)):
-            mas1=find_point(pl1x,pl1y,dl1x,dl1y,0,0,99,0)
-        if(cross(pl1x,pl1y,dl1x,dl1y,99,99,99,0)):
-            mas1=find_point(pl1x,pl1y,dl1x,dl1y,99,99,99,0)
-        if(cross(pl1x,pl1y,dl1x,dl1y,99,99,0,99)):
-            mas1=find_point(pl1x,pl1y,dl1x,dl1y,99,99,0,99)
+        if(cross(pl1x,pl1y,dl1x,dl1y,0,0,0,990)): 
+            mas1=find_point(pl1x,pl1y,dl1x,dl1y,0,0,0,990)
+            print("1")
+        if(cross(pl1x,pl1y,dl1x,dl1y,0,0,990,0)):
+            mas1=find_point(pl1x,pl1y,dl1x,dl1y,0,0,990,0)
+            print("2")
+        if(cross(pl1x,pl1y,dl1x,dl1y,990,990,990,0)):
+            mas1=find_point(pl1x,pl1y,dl1x,dl1y,990,990,990,0)
+            print("3")
+        if(cross(pl1x,pl1y,dl1x,dl1y,990,990,0,990)):
+            mas1=find_point(pl1x,pl1y,dl1x,dl1y,990,990,0,990)
+            print("4")
         dl1x = mas1[0]
         dl1y = mas1[1]
         pl2x = mas1[0]
         pl2y = mas1[1]
         dl2x = mas1[0]
         dl2y = mas1[1]
+        print (int(dl1x), int(dl1y), int(pl1x), int(pl1y))
+        print (int(dl2x), int(dl2y), int(pl2x), int(pl2y))
         rmin=200
-        for i in range (r.Number_of_walls):
-            if(cross(pl1x,pl1y,dl1x,dl1y,r.Coordinates[(2*i) - 2],r.Coordinates[(2*i) - 1],r.Coordinates[int(2*((i+1)%r.Number_of_walls)) - 2],r.Coordinates[int(2*((i+1)%r.Number_of_walls)) - 1])):
-                mas1=find_point(pl1x,pl1y,dl1x,dl1y,r.Coordinates[(2*i) - 2],r.Coordinates[(2*i) - 1],r.Coordinates[int(2*((i+1)%r.Number_of_walls)) - 2],r.Coordinates[int(2*((i+1)%r.Number_of_walls)) - 1])
-            if(mas1[2]<rmin):
-                rmin = mas1[2]
-                pl2x = mas1[0]
-                pl2y = mas1[1]
-                mas2=find_mir(pl1x,pl1y,mas1[0],mas1[1],r.Coordinates[(2*i) - 2],r.Coordinates[(2*i) - 1],r.Coordinates[int(2*((i+1)%r.Number_of_walls)) - 2],r.Coordinates[int(2*((i+1)%r.Number_of_walls)) - 1])
-                dl2x=mas2[0]
-                dl2y=mas2[1]
-        self.canvasRoom.create_line(ourLaser.Position_x,ourLaser.Position_y,int(pl2x) + 100,int(pl2y) + 100,fill="red", width=2)
-        ourLaser.Position_x  = int(pl2x) + 100
-        ourLaser.Position_y  = int(pl2y) + 100
-        ourLaser.Direction_x = int(dl2x)
-        ourLaser.Direction_y = int(dl2y)
-        print int(dl2x) + 100, int(dl2y) + 100, int(pl2x) + 100, int(pl2y) + 100
+        for i in range (r.Number_of_walls-1):
+            if(cross(pl1x,pl1y,dl1x,dl1y,r.Coordinates[2*i],r.Coordinates[(2*i) + 1],r.Coordinates[int((2*i+2)%(2*r.Number_of_walls)) ],r.Coordinates[int((2*i + 3)%(2*r.Number_of_walls)) ])):
+                mas1=find_point(pl1x,pl1y,dl1x,dl1y,r.Coordinates[2*i],r.Coordinates[(2*i) + 1],r.Coordinates[int((2*i+2)%(2*r.Number_of_walls)) ],r.Coordinates[int((2*i + 3)%(2*r.Number_of_walls))])
+                if((mas1[2]<rmin)and(i!=old_i)):
+                    print("i=",i)
+                    new_i=i
+                    rmin = mas1[2]
+                    pl2x = mas1[0]
+                    pl2y = mas1[1]
+                    mas2=find_mir(pl1x,pl1y,mas1[0],mas1[1],r.Coordinates[(2*i)],r.Coordinates[(2*i) + 1],r.Coordinates[int((2*i+2)%(2*r.Number_of_walls)) ],r.Coordinates[int((2*i + 3)%(2*r.Number_of_walls))])
+                    dl2x=mas2[0]
+                    dl2y=mas2[1]
+        self.canvasRoom.create_line(ourLaser.Position_x,ourLaser.Position_y,int(pl2x) ,int(pl2y) ,fill="red", width=2)
+        old_i=new_i
+        ourLaser.Position_x  = (pl2x) 
+        ourLaser.Position_y  = (pl2y) 
+        ourLaser.Direction_x = (dl2x)
+        ourLaser.Direction_y = (dl2y)
+        print (int(dl2x), int(dl2y), int(pl2x), int(pl2y))
 
 app = MirrorRoomApp(Title="Mirror Room")
 app.mainloop()
