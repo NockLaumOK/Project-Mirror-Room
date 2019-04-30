@@ -118,6 +118,7 @@ class MirrorRoomApp(Frame):
         prev_y = y
 
     def placelaser(self):
+        self.canvasRoom.create_line(ourRoom.Coordinates[0],ourRoom.Coordinates[1],ourRoom.Coordinates[len(ourRoom.Coordinates)-2],ourRoom.Coordinates[len(ourRoom.Coordinates)-1])
         self.canvasRoom.bind("<1>", self.clicklaser)
 
     def clicklaser(self, event):
@@ -178,7 +179,8 @@ class MirrorRoomApp(Frame):
         print (int(dl1x), int(dl1y), int(pl1x), int(pl1y))
         print (int(dl2x), int(dl2y), int(pl2x), int(pl2y))
         rmin=200
-        for i in range (r.Number_of_walls-1):
+        new_i=-1
+        for i in range (r.Number_of_walls):
             if(cross(pl1x,pl1y,dl1x,dl1y,r.Coordinates[2*i],r.Coordinates[(2*i) + 1],r.Coordinates[int((2*i+2)%(2*r.Number_of_walls)) ],r.Coordinates[int((2*i + 3)%(2*r.Number_of_walls)) ])):
                 mas1=find_point(pl1x,pl1y,dl1x,dl1y,r.Coordinates[2*i],r.Coordinates[(2*i) + 1],r.Coordinates[int((2*i+2)%(2*r.Number_of_walls)) ],r.Coordinates[int((2*i + 3)%(2*r.Number_of_walls))])
                 if((mas1[2]<rmin)and(i!=old_i)):
