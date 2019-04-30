@@ -72,7 +72,7 @@ class MirrorRoomApp(Frame):
 
     def create(self):
         '''Create all the widgets'''
-        self.canvasRoom = Canvas(self, width=100, height=100, bg='#FFFFFF')
+        self.canvasRoom = Canvas(self, width=500, height=500, bg='#FFFFFF')
         self.canvasRoom.grid(columnspan=1, sticky=W+N+E)
         self.canvasRoom.bind("<Motion>", self.mousemove)
         self.buttonFrame = Frame(self)
