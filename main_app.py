@@ -1,6 +1,19 @@
 import math
-
+import gettext
 from tkinter import *
+import os.path
+
+#datapath = os.path.dirname(sys.argv[0])
+#gettext.install('messages', datapath)
+#gettext.bindtextdomain('main_app', localedir=None)
+#gettext.gettext('main_app')
+
+bindir=os.path.realpath(sys.argv[0])
+for localedir in bindir, None, ".":
+    localefile=gettext.find('main_app',localedir)
+    if localefile: 
+        break
+gettext.install('main_app','./ru/LC_MESSAGES')
 
 root = Tk()#for quit_function
 
@@ -78,13 +91,13 @@ class MirrorRoomApp(Frame):
         self.canvasRoom.bind("<Motion>", self.mousemove)
         self.buttonFrame = Frame(self)
         self.buttonFrame.grid(row=1, column=0, sticky=W)
-        self.buttonBuildRoom = Button(self.buttonFrame, text='Build Room', command=self.buildroom)
+        self.buttonBuildRoom = Button(self.buttonFrame, text=_("Build Room"), command=self.buildroom)
         self.buttonBuildRoom.grid(row=1, column=0, sticky=W)
-        self.buttonBuildLaser = Button(self.buttonFrame, text='Place Laser', command=self.placelaser)
+        self.buttonBuildLaser = Button(self.buttonFrame, text=_("Place Laser"), command=self.placelaser)
         self.buttonBuildLaser.grid(row=1, column=1, sticky=W)
-        self.buttonNextReflection = Button(self.buttonFrame, text='Next Reflection', command=self.nextreflection)
+        self.buttonNextReflection = Button(self.buttonFrame, text=_("Next Reflection"), command=self.nextreflection)
         self.buttonNextReflection.grid(row=1, column=2, sticky=W)
-        self.buttonQuit = Button(self.buttonFrame, text='Quit', command=self.quit_function)
+        self.buttonQuit = Button(self.buttonFrame, text=_("Quit"), command=self.quit_function)
         self.buttonQuit.grid(row=1, column=3, sticky=W)
         self.XCoordLabel = Label(self.buttonFrame, text = 'X')
         self.XCoordLabel.grid(row=1, column=4)
